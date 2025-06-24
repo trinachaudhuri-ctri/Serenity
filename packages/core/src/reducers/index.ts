@@ -31,7 +31,24 @@ export const queryReducer = (state = INITIAL_QUERY, action: QueryActions) => {
   }
 };
 
-
+// Legacy configReducer for backward compatibility with tests
+export const configReducer = (state = {
+  radio: false,
+  repeat: 'repeat-all',
+  setup: false,
+}, action: any) => {
+  switch (action.type) {
+    case 'UPDATE_THEME':
+      return state;
+    case 'REPEAT':
+      return {
+        ...state,
+        repeat: action.repeat,
+      };
+    default:
+      return state;
+  }
+};
 
 
 export const RootReducer = combineReducers<any>({
