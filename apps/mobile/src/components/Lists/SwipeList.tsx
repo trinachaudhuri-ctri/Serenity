@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useCallback } from 'react';
 import { Surface, IconButton, Divider } from 'react-native-paper';
 import { View, StyleSheet, RefreshControl } from 'react-native';
 import { SwipeListView } from 'react-native-swipe-list-view';
@@ -34,17 +34,17 @@ export const SwipeList = ({
     await fetchData();
     setRefreshing(false);
   };
-
-  return (
-    <SwipeListView
-      data={data}
-      ListHeaderComponent={() => (
-        <ListSongHeader
+  const ListHeaderComponent=useCallback(()=>{
+     <ListSongHeader
           title={title}
           cover={cover}
           addSongsToQueue={() => addToQueue(data)}
         />
-      )}
+  },[title, cover, addToQueue, data])
+  return (
+    <SwipeListView
+      data={data}
+      ListHeaderComponent={ListHeaderComponent}
       ListFooterComponent={() => <View style={{ height: 100 }} />}
       ItemSeparatorComponent={() => <Divider inset />}
       keyExtractor={(item, index) => index.toString()}
@@ -71,7 +71,6 @@ export const SwipeList = ({
 const styles = StyleSheet.create({
   rowBack: {
     alignItems: 'center',
-    // backgroundColor: '#DDD',
     flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
